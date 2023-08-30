@@ -8,6 +8,10 @@ import subprocess
 DARK_DELAY = 10 #this is where you define after how many seconds you want the display to go dark when there is no motion detected
 THRESHOLD = .5
 QUEUE_LEN = 10
+AWAKE_RANGE = {
+    "wake": 6, # wake time is 6am
+    "sleep": 22, # sleeop time is 10pm
+} # only awake the monitor between these hours
 #pir1 = MotionSensor(17, threshold = THRESHOLD, queue_len = QUEUE_LEN) #GPIO number here
 #pir2 = MotionSensor(4, threshold = THRESHOLD, queue_len = QUEUE_LEN) #GPIO number here
 pins = [17, 4] # list the pins with PIR sensors here
@@ -17,7 +21,7 @@ for pin in pins:
 
 def main():
     last_motion_time = time.time()
-    monitor_on = True
+    monitor_on = False # assume the monitor is off
     while True:
         motion = False
         for pir in pirs:
@@ -25,7 +29,7 @@ def main():
                 motion = True
                 last_motion_time = time.time()
         if motion: # there is motion
-            if not monitor_on:
+            if not monitor_on and awake_time_frame():
                 monitor_on = True
                 turn_on()
                 
@@ -37,6 +41,14 @@ def main():
                 
         time.sleep(0.1)
 
+
+# determine if the current time is in the time frame of the day when it should be awakened
+def awake_time_frame():
+    this_hour = datetime.datetime.now().hour
+    if this_hour >= AWAKE_RANGE['wake'] and this_hour < AWAKE_RANGE['sleep']:
+        #print('this_hour %s is between wake time of %s and sleep time of %s' % (this_hour, AWAKE_RANGE['wake'], AWAKE_RANGE['sleep']))
+        return True
+    return False
 
 # turn the screen on
 def turn_on():
