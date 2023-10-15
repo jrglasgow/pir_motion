@@ -6,7 +6,7 @@ After=multi-user.target
 Type=idle
 
 User=pi
-ExecStart=/usr/bin/python3 /home/pi/bin/motionsensor.py
+ExecStart=/usr/bin/python3 /home/pi/bin/pir_motion/gpiozero_motion_sensor.py
 
 Restart=always
 RestartSec=60

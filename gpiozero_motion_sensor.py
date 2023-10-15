@@ -5,7 +5,7 @@ import datetime
 from gpiozero import MotionSensor
 import subprocess
 
-DARK_DELAY = 10 #this is where you define after how many seconds you want the display to go dark when there is no motion detected
+DARK_DELAY = 60 #this is where you define after how many seconds you want the display to go dark when there is no motion detected
 THRESHOLD = .5
 QUEUE_LEN = 10
 AWAKE_RANGE = {
